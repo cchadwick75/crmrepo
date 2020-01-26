@@ -12,12 +12,12 @@ class CreateCustomerForm(ModelForm):
 
     class Meta(object):
         '''
-        This will perform the attributes setting for the location model to be functional with HTML
+        This will perform the attributes setting for the customer model to be functional with HTML
         '''
         def __init__(self):
             pass
         model = Customer
-        print("model : {}".format(model))
+
 
         fields = ['name', 'phone', 'street_address', 'street_address2', 'city', 'state', 'zip_code']
 

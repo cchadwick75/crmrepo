@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from logging.handlers import DEFAULT_TCP_LOGGING_PORT
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -136,3 +137,62 @@ LOGOUT_REDIRECT_URL = '/'
 
 STATIC_URL = '/static/'
 MEDIA_URL =  '/media/'
+
+
+# logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(processName)s %(pathname)s %(module)s %(funcName)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'socket': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.SocketHandler',
+            'formatter': 'verbose',
+            'host': 'localhost',
+            'port': DEFAULT_TCP_LOGGING_PORT,
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        '': {
+            'handlers': 'console,socket'.split(','),
+            'level': 'INFO',
+            'propagate': True,
+        },
+        "django_auth_ldap": {
+            "level": "DEBUG", "handlers": ["console", "socket"]
+        },
+        'django.db': {
+            "level": "DEBUG", "handlers": ["console", "socket"]
+        },
+    }
+}

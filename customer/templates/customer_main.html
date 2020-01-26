@@ -1,21 +1,132 @@
 <!DOCTYPE html>
 
-{% block title %}Customer Relations Manager{% endblock %}
 {% load static %}
 {% load i18n %}
 
 {% block JavaScriptHead %}
 
-    <script type="text/javascript" language="javascript" src="{% static "/scripts/jquery-3.3.1.js" %}"></script>
-    <link rel="stylesheet" href="{% static "css/jquery-ui-user-admin-custom.min.css" %}" />
-    <link rel="stylesheet" href="{% static "css/bootstrap-grid_4.min.css" %}" />
-    <script src="/static/bootstrap/js/bootstrap.min.js" ></script>
-    <link rel="stylesheet" href="{% static "css/bootstrap_4.min.css" %}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+    <script>
+    $(function() {
+        $(document).ready(function () {
+            //$("#id_location_create").prop("disabled", true);
+            $("#id_customer_create").prop("disabled", true);
+            $('.mdb-select').materialSelect();
+
+
+
+        });
+
+        function form_validation(theValue) {
+
+            var clli_code = theValue;
+
+            /* CLLI CODE CHECK - AJAX CALL TO CHECK IF CLLI CODE EXISTS */
+            /* If it exists return a link to the location  */
+
+            $.ajax({
+                    method: 'GET',
+                    type: 'JSON',
+                    data: {'name': name, "phone": phone},
+
+                    //handle successful response
+                    success: function (data) {
+                        console.log(data)
+                    }
+            });
+        }
+    });
+    </script>
+
+
+    <style type="text/css">
+    #CreateCustomerForm {
+            padding:10px;
+            border:1px;
+            border-style:solid;
+            border-color:#00579b;
+            background-color: #f1f5f9;
+            border-radius: 10px;
+            box-shadow:3px 3px 5px 6px #ccc;
+            margin:20px;
+            }
+    title {
+                font-weight:bold;
+                color:#00579b;
+            }
+
+    label {
+                font-weight:bold;
+                color:#00579b;
+            }
+
+    h6 {
+        color:#00579b;
+        margin:10px
+
+    }
+
+
+    hr {
+      display: block;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      margin-left: auto;
+      margin-right: auto;
+      border-style:inset;
+      border-width: 1px;
+      border-color:#00579b;
+    }
+
+    .row{
+            padding-top: 10px;
+            }
+
+    .error{
+            display: none;
+
+            }
+
+    #id_customer_create {
+            background-color:#00579b;
+            color: #f1f5f9;
+            position: relative;
+            margin-left: 20px;
+            }
+
+</style>
 {% endblock %}
 
 {% block CONTENT %}
+    <div class="container">
+        <form id = 'CreateCustomerForm' method="POST" class="post-form" action="{% url 'customer' %}">
+            {% csrf_token %}
+                <div class="form-row">
+                    <h6>Create Customer</h6>
 
+                </div>
+                <div style="width: 100%; height: 1px; background: #e5e5e5; margin: 15px 0"></div>
+                <div class="form-row">
+                <div class="form-group col-md-8">
+                 {{ form.as_p }}
+                </div>
+
+                </div>
+                <div class="form-row">
+                <div class="form-group col-md-4">
+
+                <button type="submit" id = "id_customer_create" class="btn btn-primary btn">Add Customer</button>
+
+                </div>
+                </div>
+
+          </form>
+
+        </div>
 
 {% endblock %}
 
