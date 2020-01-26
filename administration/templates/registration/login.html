@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+{% load static %}
+{% load i18n %}
+{% block JavaScriptHead %}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
+<style type="text/css">
+        #LoginForm {
+            padding:10px;
+            border:1px;
+            border-style:solid;
+            border-color:#00579b;
+            background-color: #f1f5f9;
+            border-radius: 10px;
+            box-shadow:3px 3px 5px 6px #ccc;
+            margin:20px;
+            }
+    title {
+                font-weight:bold;
+                color:#00579b;
+            }
+
+    label {
+                font-weight:bold;
+                color:#00579b;
+            }
+
+    h6 {
+        color:#00579b;
+        margin:20px
+
+    }
+
+
+    hr {
+      display: block;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      margin-left: auto;
+      margin-right: auto;
+      border-style:inset;
+      border-width: 1px;
+      border-color:#00579b;
+    }
+
+    .row{
+            padding-top: 10px;
+            }
+
+    .error{
+            display: none;
+
+            }
+
+    #login_button {
+            background-color:#00579b;
+            color: #f1f5f9;
+            position: relative;
+            right: 20px;
+            }
+    </style>
+{% endblock %}
+
+{% block CONTENT %}
+    <div class="container">
+        <form method="POST" id = 'LoginForm' accept-charset="utf-8" class="post-form">
+                {% csrf_token %}
+                <div class="row">
+                    <h6>CRM Login Screen</h6>
+                </div>
+               <div class="row">
+                    <div class="col s4">
+                        {{ form }}
+                    </div>
+               <button id = "login_button" type="submit" class="btn btn-primary btn-small">Login</button>
+
+               </div>
+        </form>
+    </div>
+
+{% endblock %}
+</html>
