@@ -13,14 +13,12 @@ from selenium import webdriver
 from model_mommy import mommy
 import random
 from administration.models import Customer
-from selenium.common.exceptions import NoSuchElementException, UnexpectedTagNameException
-
-
-class LocationCreateTest(StaticLiveServerTestCase):
+from selenium.common.exceptions import NoSuchElementException
+class CustomerCreateTest(StaticLiveServerTestCase):
     '''
-    This is the full test class that will check the location create.
+    This is the full test class that will check the customer create.
     '''
-    fixtures = ['location_create_group_permissions.yaml', 'location_create_dashboard_filter_tests.yaml']
+
     display = None
     browser = None
 
@@ -34,7 +32,7 @@ class LocationCreateTest(StaticLiveServerTestCase):
         # Probably should make it configurable which browser to use for the test
         cls.browser = webdriver.Chrome()
         # cls.browser = webdriver.Firefox()
-        super(LocationCreateTest, cls).setUpClass()
+        super(CustomerCreateTest, cls).setUpClass()
 
     @classmethod
     def tearDownClass(cls):
@@ -44,7 +42,7 @@ class LocationCreateTest(StaticLiveServerTestCase):
         '''
         cls.browser.quit()
         cls.display.stop()
-        super(LocationCreateTest, cls).tearDownClass()
+        super(CustomerCreateTest, cls).tearDownClass()
 
     def create_pre_authenticated_session(self, username):
         """Helper function that creates a pre-authenticated admin session"""
@@ -66,26 +64,28 @@ class LocationCreateTest(StaticLiveServerTestCase):
 
 
 
-    def test_existing_location_button(self):
+    def test_existing_customer(self):
         '''
         This ensures the location link uses the  works correctly on the location page.
         :return:
         '''
         self.digits = string.digits
-        self.letters = string.letters
+        self.letters = string.ascii_letters
 
-        testing_customer = mommy.make(Customer,
-                   name='Washington High',
+        mommy.make(Customer,
+                   name='Collin Cbadwick',
                    city=(u''.join(
                        random.choice(self.letters) for _ in range(10))),
                    street_address=(u''.join(
                        random.choice(self.letters) for _ in range(10))),
                    street_address2=(u''.join(
                        random.choice(self.letters) for _ in range(10))),
-
+                   phone='7163977777',
+                   state='SC',
                    zip_code=(
                        u''.join(random.choice(self.digits) for _ in range(5)))
-                   )
+                   ),
+
         mommy.make(Customer,
                    name=(u''.join(
                        random.choice(self.letters) for _ in range(10))),
@@ -94,32 +94,49 @@ class LocationCreateTest(StaticLiveServerTestCase):
                        random.choice(self.letters) for _ in range(10))),
                    street_address2=(u''.join(
                        random.choice(self.letters) for _ in range(10))),
-                   region='SC',
+                   state='SC',
                    zip_code=(
                        u''.join(random.choice(self.digits) for _ in range(5)))
                    )
 
-
         wd_wait = WebDriverWait(self.browser, 10)
-        # This will create an actual location for testing purposes and also the location management button
-        # when a location exists.
+        # This will create an actual test customer
         self.create_pre_authenticated_session('admin')
         self.browser.get(self.live_server_url)
-        wd_wait.until(EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, "New Location")))
-        new_location_link = self.browser.find_element_by_partial_link_text("New Location")
-        new_location_link.click()
-        # elem = wd_wait.until(EC.element_to_be_clickable((By.ID, "id_clli_code")))
-        # submit_element = self.browser.find_element_by_id("id_clli_code")
-        # submit_element.click()
-        # submit_element.send_keys(valid_clli)
-        #location = Location.objects.get(clli_code=clli_code)
-        # Keep CLLI Button
-        wd_wait.until(EC.element_to_be_clickable((By.ID, "id_location_show")))
-        keep_element = self.browser.find_element_by_id("id_location_show")
+        wd_wait.until(EC.element_to_be_clickable((By.ID, "id_name")))
+        name_add = self.browser.find_element_by_id("id_name")
+        name_add.send_keys("Collin")
+
+        wd_wait.until(EC.element_to_be_clickable((By.ID, "id_phone")))
+        name_add = self.browser.find_element_by_id("id_phone")
+        name_add.send_keys("7163977777")
+
+        wd_wait.until(EC.element_to_be_clickable((By.ID, "id_street_address")))
+        name_add = self.browser.find_element_by_id("id_street_address")
+        name_add.send_keys("123 main st")
+
+        wd_wait.until(EC.element_to_be_clickable((By.ID, "id_street_address2")))
+        name_add = self.browser.find_element_by_id("id_street_address2")
+        name_add.send_keys("apt 108")
+
+        wd_wait.until(EC.element_to_be_clickable((By.ID, "id_city")))
+        name_add = self.browser.find_element_by_id("id_city")
+        name_add.send_keys("Fort Mill")
+
+        wd_wait.until(EC.element_to_be_clickable((By.ID, "id_zip")))
+        name_add = self.browser.find_element_by_id("id_zip")
+        name_add.send_keys("12345")
+
+        wd_wait.until(EC.element_to_be_clickable((By.ID, "id_customer_create")))
+        keep_element = self.browser.find_element_by_id("id_customer_create")
         keep_element.click()
+
         try:
-            lambda: self.browser.find_element_by_xpath(
-                "//*[@id='search_result_count']/td[1]").text
-        except NoSuchElementException as nothing_here:
-            self.fail(
-                'There should be at least 3 search results, but found none. Error is {}'.format(nothing_here))
+            wd_wait.until(EC.visibility_of_element_located((By.ID, "id_error")))
+            customer_add = self.browser.find_element_by_id("id_error")
+            self.assertTrue(customer_add.text == 'Not Added Check Your Data!')
+            f"expected: More than 3 characters needed', actual : {name_add.text}"
+        except NoSuchElementException as element_doesnt_exist:
+            self.fail(f'Name Errors Not Displaying at all : Response - {element_doesnt_exist}')
+
+

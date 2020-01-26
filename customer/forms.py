@@ -24,7 +24,7 @@ class CreateCustomerForm(ModelForm):
 
 
         widgets = {'name': forms.TextInput(attrs={'class':'form-control',
-                                                       'id':'name',
+                                                       'id':'id_name',
                                                        'required': True,
                                                        'placeholder': 'Enter Customer Name',
                                                        'autocomplete': 'off'

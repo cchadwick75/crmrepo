@@ -14,7 +14,7 @@
     $(function() {
         $(document).ready(function () {
             //$("#id_location_create").prop("disabled", true);
-            $("#id_customer_create").prop("disabled", true);
+            {#$("#id_customer_create").prop("disabled", true);#}
             $('.mdb-select').materialSelect();
 
 
@@ -28,17 +28,32 @@
             /* CLLI CODE CHECK - AJAX CALL TO CHECK IF CLLI CODE EXISTS */
             /* If it exists return a link to the location  */
 
-            $.ajax({
-                    method: 'GET',
-                    type: 'JSON',
-                    data: {'name': name, "phone": phone},
 
-                    //handle successful response
-                    success: function (data) {
-                        console.log(data)
-                    }
-            });
         }
+
+        {#$('#id_customer_create').on('click', function () {#}
+        {#    var name = $('#id_name').val();#}
+        {#    var phone = $('#id_phone').val();#}
+        {##}
+        {##}
+        {#    $.ajax({#}
+        {#            method: 'GET',#}
+        {#            type: 'JSON',#}
+        {#            data: {'name': name,#}
+        {#                   "phone": phone,#}
+        {#                    },#}
+        {##}
+        {#            //handle successful response#}
+        {#            success: function (data) {#}
+        {#                console.log(data)#}
+        {#            }#}
+        {#    });#}
+
+            {#var theValue = $(this).val();#}
+            {#$(this).data("value", theValue);#}
+            {#clear_form();#}
+            {#var invalidCLLI = false;#}
+            {#var clli_dash = theValue.substring(3, 4) ;#}
     });
     </script>
 
@@ -107,7 +122,6 @@
             {% csrf_token %}
                 <div class="form-row">
                     <h6>Create Customer</h6>
-
                 </div>
                 <div style="width: 100%; height: 1px; background: #e5e5e5; margin: 15px 0"></div>
                 <div class="form-row">
@@ -119,8 +133,8 @@
                 <div class="form-row">
                 <div class="form-group col-md-4">
 
-                <button type="submit" id = "id_customer_create" class="btn btn-primary btn">Add Customer</button>
-
+                    <button type="submit" id = "id_customer_create" class="btn btn-primary btn">Add Customer</button>
+                    {{ message }}
                 </div>
                 </div>
 

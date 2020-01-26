@@ -87,13 +87,12 @@ class CustomerMain(View):
         '''
 
         :param request:
-        :return: redirects to location management page after the new location is posted to oceanicnet
+        :return: redirects to customer page after the new customer is posted to oceanicnet
         '''
 
         form = self.form_class(request.POST)
 
         if form.is_valid():
             data = form.save()
-
             return redirect('/customer/', {"message":'Customer Successfully Added'})
         return redirect('/customer/', {"message": 'Not Added Check Your Data'})
